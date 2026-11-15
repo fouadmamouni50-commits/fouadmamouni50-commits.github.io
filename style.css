@@ -1,0 +1,2033 @@
+/* ===== 1. Variables : couleurs et polices, définies une seule fois ===== */
+:root {
+    --fond: #0F1117;                            /* fond très sombre */
+    --or: #C9A86A;                              /* accent doré */
+    --texte: #EEEAE2;                           /* blanc cassé */
+    --texte-doux: rgba(238, 234, 226, 0.6);     /* gris clair (le blanc cassé, plus transparent) */
+    --carte: rgba(255, 255, 255, 0.03);         /* fond des cartes, à peine plus clair */
+    --bordure: rgba(255, 255, 255, 0.08);       /* bordure très fine */
+    --bordure-forte: rgba(255, 255, 255, 0.18); /* bordure un peu plus visible (schéma) */
+    --bordure-or: rgba(201, 168, 106, 0.45);    /* le doré, plus transparent */
+    --fond-header: rgba(15, 17, 23, 0.85);      /* le fond, légèrement transparent */
+
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "DM Sans", "Segoe UI", Arial, sans-serif;
+
+    --rayon: 16px;                              /* arrondi des cartes */
+    --espacement-lettres: 0.2em;                /* pour les majuscules espacées */
+
+    --texte-nom: #F4F1EA;                       /* blanc cassé du grand nom de l'accueil */
+
+    /* Le conteneur commun à toute la page (header, sections, footer) */
+    --conteneur: 1200px;                        /* largeur maximale, marges comprises */
+    --gouttiere: 20px;                          /* marge intérieure à gauche et à droite (40px sur ordinateur) */
+    /* Marge à gauche et à droite d'un bloc pleine largeur (header, footer) pour que son contenu
+       s'aligne sur le conteneur : au moins la gouttière, plus la moitié de l'espace au-delà de 1200px */
+    --marge-conteneur: max(var(--gouttiere), calc((100% - var(--conteneur)) / 2 + var(--gouttiere)));
+
+    --ecart-menu: 28px;                         /* écart entre les liens du menu (mobile) */
+}
+
+/* Entre 900 et 1199px : gouttière de 40px, liens du menu plus serrés (22px) */
+@media (min-width: 900px) {
+    :root {
+        --gouttiere: 40px;
+        --ecart-menu: 22px;
+    }
+}
+
+/* À partir de 1200px : écart normal entre les liens du menu (36px) */
+@media (min-width: 1200px) {
+    :root {
+        --ecart-menu: 36px;
+    }
+}
+
+/* ===== 2. Base : réglages appliqués à toute la page ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box; /* la bordure et le padding sont inclus dans la largeur */
+}
+
+html {
+    scroll-behavior: smooth;    /* défilement doux vers les sections */
+    scroll-padding-top: 8.5rem; /* laisse la place au header collant (3 lignes sur mobile) */
+}
+
+body {
+    margin: 0;
+    background-color: var(--fond);
+    color: var(--texte);
+    font-family: var(--sans);
+    font-size: 16px;          /* taille du texte normal */
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Halo lumineux très discret à droite, fixe pendant le défilement */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;            /* derrière tout le contenu */
+    pointer-events: none;   /* ne bloque pas les clics */
+    background: radial-gradient(circle at 90% 25%, rgba(201, 168, 106, 0.07), transparent 45%);
+}
+
+h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+a {
+    color: var(--or);
+    text-underline-offset: 4px;
+}
+
+/* Le mot mis en valeur dans les grands titres : italique doré */
+h1 em,
+h2 em {
+    font-style: italic;
+    color: var(--or);
+}
+
+/* Contour doré visible quand on navigue au clavier (touche Tab) */
+a:focus-visible {
+    outline: 1px solid var(--or);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* ===== 3. Barre de progression du défilement (pilotée par le JavaScript) ===== */
+.barre-progression {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 100%;
+    height: 2px;
+    background-color: var(--or);
+    transform: scaleX(0);       /* 0 = vide, 1 = pleine largeur */
+    transform-origin: left;
+}
+
+/* ===== 4. Header collé en haut de l'écran ===== */
+/* Sur mobile : l'étiquette, puis le logo et le bouton, puis le menu qui défile horizontalement */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 20; /* reste au-dessus du contenu pendant le défilement */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 16px; /* espace minimum entre le logo, le menu et le bouton */
+    /* le fond reste sur toute la largeur, mais le contenu s'aligne sur le conteneur */
+    padding: 14px var(--marge-conteneur) 0; /* header moins haut (avant : 1rem en haut) */
+    background-color: var(--fond-header);
+    backdrop-filter: blur(12px);          /* floute le contenu qui passe dessous */
+    -webkit-backdrop-filter: blur(12px);  /* même chose pour Safari */
+    border-bottom: 1px solid var(--bordure);
+}
+
+/* L'étiquette « PORTFOLIO — BTS SIO SISR » au-dessus, sur toute la largeur :
+   texte gris clair, petite ligne dorée devant.
+   « header .etiquette-header » est plus précis que « .etiquette » (section 7) : ses réglages l'emportent */
+header .etiquette-header {
+    flex-basis: 100%;
+    gap: 0.9rem;
+    margin-bottom: 8px;   /* seulement 8px d'écart avec la ligne du logo */
+    color: var(--texte-doux);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+}
+
+/* La petite ligne dorée devant l'étiquette du header (les étiquettes des sections n'en ont plus) */
+header .etiquette-header::before {
+    content: "";
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 1px;
+    background-color: var(--or);
+}
+
+/* « Fouad. » en serif, avec le point en doré : 24px */
+.logo {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--texte);
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--or);
+}
+
+/* Le menu passe sous le logo, sur toute la largeur, et défile horizontalement */
+nav {
+    order: 3;
+    width: calc(100% + 2 * var(--gouttiere));   /* va jusqu'aux bords de l'écran */
+    margin: 0.5rem calc(-1 * var(--gouttiere)) 0;
+    overflow-x: auto;
+    scrollbar-width: none;        /* cache la barre de défilement (Firefox) */
+}
+
+nav::-webkit-scrollbar {
+    display: none;                /* cache la barre de défilement (Chrome, Safari) */
+}
+
+nav ul {
+    display: flex;
+    gap: var(--ecart-menu);       /* 28px sur mobile, 22px de 900 à 1199px, 36px dès 1200px (voir :root) */
+    width: max-content;           /* les liens restent sur une seule ligne */
+    margin: 0;
+    padding: 0 var(--gouttiere);  /* le 1er lien s'aligne sur le logo */
+    list-style: none;
+}
+
+nav a {
+    position: relative;
+    display: block;
+    padding: 0.7rem 0;
+    color: var(--texte-doux);
+    font-size: 13px;              /* une seule taille, sur toutes les largeurs d'écran */
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.25s;
+}
+
+/* Le soulignement doré, caché par défaut (largeur 0) */
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0.14em; /* compense l'espace après la dernière lettre */
+    bottom: 0.35rem;
+    height: 1px;
+    background-color: var(--or);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+}
+
+/* Au survol et sur la section active (classe ajoutée par le JavaScript) */
+nav a:hover,
+nav a.actif {
+    color: var(--texte);
+}
+
+nav a:hover::after,
+nav a.actif::after {
+    transform: scaleX(1);
+}
+
+/* Le bouton « Me contacter » du header : rectangulaire, plus compact, bordure et texte dorés ;
+   caché sous 900px (il réapparaît plus bas).
+   « header .bouton-header » est plus précis que « .bouton » (section 5) : ses réglages l'emportent */
+header .bouton-header {
+    display: none;
+    padding: 10px 18px;
+    font-size: 13px;
+    border-color: var(--or);
+    color: var(--or);
+    white-space: nowrap;
+}
+
+header .bouton-header:hover {
+    background-color: var(--or);
+    border-color: var(--or);
+    color: var(--fond);
+}
+
+/* ===== 5. Boutons (les mêmes sur tout le site) ===== */
+/* Base commune : rectangulaires avec coins légèrement arrondis (plus de pilule),
+   DM Sans 13px, graisse 600, majuscules espacées */
+.bouton {
+    display: inline-block;
+    padding: 16px 28px;
+    border: 1px solid var(--or);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.25s, color 0.25s, border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+
+/* Bouton plein : fond doré, texte sombre */
+.bouton-plein {
+    background-color: var(--or);
+    color: var(--fond);
+}
+
+.bouton-plein:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(201, 168, 106, 0.25);
+}
+
+/* Bouton à bordure : bordure fine gris clair, texte blanc ; la bordure devient dorée au survol */
+.bouton-contour {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--texte);
+}
+
+.bouton-contour:hover {
+    border-color: var(--or);
+}
+
+/* Groupe de boutons (passent l'un sous l'autre si l'écran est étroit) */
+.boutons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ===== 6. Sections : beaucoup d'espace et une fine ligne de séparation ===== */
+/* Chaque section est le conteneur commun : 1200px maximum, centré, gouttière à gauche et à droite */
+section {
+    max-width: var(--conteneur);
+    margin: 0 auto;
+    padding: 5.5rem var(--gouttiere);
+}
+
+section + section {
+    border-top: 1px solid var(--bordure);
+}
+
+/* Grand titre de section (le même sur toutes les pages, dont « Réseaux & Systèmes ») :
+   38px minimum, 4,5 % de l'écran, 56px maximum.
+   .titre-page : le titre principal (h1) des pages autres que l'accueil, même style qu'un h2 */
+h2,
+.titre-page {
+    font-size: clamp(38px, 4.5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    max-width: 16ch;
+    margin-bottom: 3rem;
+}
+
+/* Sous le titre de page vient une phrase d'introduction : moins d'espace */
+.titre-page {
+    margin-bottom: 1.5rem;
+}
+
+/* ===== 7. Étiquette dorée de section (la même sur toutes les pages) ===== */
+/* Juste le texte doré en majuscules espacées, sans ligne devant : 13px, espacement 0.25em */
+.etiquette {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;   /* espace entre l'étiquette et le titre */
+    color: var(--or);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+
+/* ===== 8. Accroche ===== */
+/* Un petit espace en haut pour que le nom ne touche pas le header */
+#accueil {
+    padding-top: 24px;
+}
+
+/* Le nom en très grand, sur une seule ligne : « Fouad El Mamouni ».
+   Taille fluide : 40px minimum, 6,5 % de la largeur de l'écran, 92px maximum.
+   Sur un écran étroit, il passe à la ligne entre les mots, jamais au milieu d'un mot */
+#accueil h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(40px, 6.5vw, 92px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--texte-nom);  /* « Fouad » et « Mamouni » */
+    overflow-wrap: normal;    /* ne coupe jamais un mot */
+    hyphens: none;            /* pas de trait d'union automatique */
+}
+
+/* « El » : italique doré, même graisse que le reste du nom */
+#accueil h1 em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--or);
+}
+
+/* Le texte de présentation : 17px, gris clair, 540px de large au maximum
+   (une seule règle, sur toutes les largeurs d'écran) */
+.presentation {
+    max-width: 540px;
+    margin: 48px 0 56px;
+    color: var(--texte-doux);
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+/* Les boutons de l'accroche : 20px d'écart */
+#accueil .boutons {
+    gap: 20px;
+}
+
+/* Les icônes sociales sous les boutons : seules (sans cercle ni fond), côte à côte, 24px d'écart */
+.icones-sociales {
+    display: flex;
+    gap: 24px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.icones-sociales a {
+    display: block;
+    color: rgba(255, 255, 255, 0.5);   /* gris clair */
+    font-size: 20px;
+    line-height: 1;
+    transition: color 0.25s;
+}
+
+/* Dorées au survol */
+.icones-sociales a:hover {
+    color: var(--or);
+}
+
+/* Les chiffres clés : une fine ligne grise sur toute la largeur, 64px sous les icônes,
+   puis 3 éléments côte à côte, alignés à gauche, 64px d'écart ;
+   sur un écran étroit, ils passent à la ligne proprement */
+.chiffres-cles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 64px;
+    margin: 64px 0 0;
+    padding: 56px 0 0;
+    border-top: 1px solid var(--bordure);
+    list-style: none;
+}
+
+/* Le chiffre (ou « SISR ») : Cormorant Garamond, 56px, blanc cassé */
+.chiffre {
+    display: block;
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--texte-nom);
+}
+
+/* Le « + » doré décoratif après le chiffre, même taille */
+.chiffre .plus {
+    color: var(--or);
+}
+
+/* Le texte sous le chiffre : 12px, majuscules espacées, gris, 8px sous le chiffre */
+.chiffre-texte {
+    display: block;
+    margin-top: 8px;
+    color: var(--texte-doux);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* ===== 8 bis. À propos ===== */
+/* Sur mobile : une seule colonne */
+.a-propos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+
+.a-propos h2 {
+    margin-bottom: 44px;   /* espace entre le titre et le bouton (avant : 32px) */
+}
+
+.a-propos h2 em {
+    display: block; /* « Systèmes » passe à la ligne */
+}
+
+/* Les 2 paragraphes : 17px, gris clair, interligne confortable, 28px entre les deux
+   (une seule règle, sur toutes les largeurs d'écran) */
+.a-propos-texte p {
+    margin-bottom: 28px;
+    color: var(--texte-doux);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+/* La grille d'informations : 4 cases en 2 × 2 (sur toutes les tailles d'écran),
+   dans un cadre arrondi au fond un peu plus clair et légèrement bleuté */
+.infos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 56px 0 0;     /* espace entre le texte et la grille (avant : 40px) */
+    background-color: #161A26;
+    border: 1px solid var(--bordure);
+    border-radius: 14px;
+    overflow: hidden; /* les coins arrondis s'appliquent aussi aux cases */
+}
+
+/* Sur mobile, les cases ne font que 175px de large : 20px de marge intérieure (32px plus bas, dès 768px) */
+.infos div {
+    padding: 20px;
+}
+
+/* Fines lignes de séparation : sous la 1re rangée (cases 3 et 4), et entre les 2 colonnes (cases 2 et 4) */
+.infos div:nth-child(n + 3) {
+    border-top: 1px solid var(--bordure);
+}
+
+.infos div:nth-child(even) {
+    border-left: 1px solid var(--bordure);
+}
+
+/* Étiquette de la case : 12px (une seule règle) */
+.infos dt {
+    margin-bottom: 0.5rem;
+    color: var(--or);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: var(--espacement-lettres);
+    text-transform: uppercase;
+}
+
+/* Valeur de la case : 16px (une seule règle) */
+.infos dd {
+    margin: 0;
+    color: var(--texte);
+    font-size: 16px;
+}
+
+/* ===== 8 ter. Compétences ===== */
+/* Titre sur 2 lignes : le mot en italique doré passe à la ligne */
+.titre-2-lignes em {
+    display: block;
+}
+
+/* Phrase d'introduction, avec une fine ligne de séparation en dessous */
+.intro-section {
+    max-width: 62ch;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--bordure);
+    color: var(--texte-doux);
+    font-size: 1.05rem;
+}
+
+/* Les mots en gras blanc dans les paragraphes gris */
+#competences strong {
+    color: var(--texte);
+    font-weight: 700;
+}
+
+/* Base commune : carte d'introduction, cartes de compétences, carte projet */
+.carte-intro,
+.carte-competence,
+.carte-projet {
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+/* Carte d'introduction : bordure dorée plus épaisse à gauche */
+.carte-intro {
+    padding: 2rem 1.5rem;
+    border-left: 3px solid var(--or);
+}
+
+.carte-intro p {
+    color: var(--texte-doux);
+}
+
+/* Petites pastilles avec icône (fond sombre, bordure fine) */
+.pastilles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pastilles li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.95rem;
+    background-color: var(--fond);
+    border: 1px solid var(--bordure-forte);
+    border-radius: 999px;
+    font-size: 0.82rem;
+}
+
+.pastilles i {
+    color: var(--or);
+}
+
+/* Une catégorie : icône dorée + titre serif, fine ligne en dessous */
+.categorie {
+    margin-top: 4.5rem;
+}
+
+.titre-categorie {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--bordure);
+    font-size: 1.9rem;
+}
+
+.titre-categorie i {
+    color: var(--or);
+    font-size: 1.1rem;
+}
+
+/* La grille de cartes : 1 colonne sur mobile (2 et 3 colonnes plus bas, dans les media queries) */
+.grille-competences {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+/* Une carte de compétence : en colonne, pour pouvoir pousser les étiquettes en bas */
+.carte-competence {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 1.5rem;
+    transition: border-color 0.3s;
+}
+
+.carte-competence:hover {
+    border-color: var(--bordure-or);
+}
+
+.carte-competence h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.75rem;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--texte);
+}
+
+.carte-competence h4 i {
+    width: 1.25rem;       /* toutes les icônes ont la même largeur : les titres sont alignés */
+    text-align: center;
+    color: var(--or);
+}
+
+.carte-competence p {
+    margin-bottom: 1.5rem;
+    color: var(--texte-doux);
+    font-size: 0.92rem;
+}
+
+/* Les étiquettes en majuscules, poussées en bas de la carte par margin-top: auto */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: auto 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tags li {
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--bordure-or);
+    border-radius: 999px;
+    color: var(--or);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* Qualités professionnelles : grandes pastilles arrondies */
+.qualites {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.qualites li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1.4rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: 999px;
+    color: var(--texte);
+    font-size: 0.95rem;
+}
+
+.qualites i {
+    color: var(--or);
+}
+
+/* Carte « Projet d'avenir » */
+.carte-projet {
+    margin-top: 4.5rem;
+    padding: 2.5rem 1.5rem;
+}
+
+.carte-projet .etiquette-carte {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.carte-projet h3 {
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+.carte-projet h3 em {
+    font-style: italic;
+    color: var(--or);
+}
+
+.carte-projet p {
+    max-width: 62ch;
+    color: var(--texte-doux);
+}
+
+/* Le parcours : pastilles reliées par des flèches (vers le bas sur mobile) */
+.parcours {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 2rem 0 2.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.parcours li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+/* La flèche dorée avant chaque étape sauf la 1re ; « / "" » la cache aux lecteurs d'écran */
+.parcours li + li::before {
+    content: "→";
+    content: "→" / "";
+    margin-left: 1.25rem;
+    color: var(--or);
+    font-size: 1.3rem;
+    line-height: 1;
+    transform: rotate(90deg); /* la flèche pointe vers le bas */
+}
+
+.parcours span {
+    padding: 0.7rem 1.2rem;
+    background-color: var(--fond);
+    border: 1px solid var(--bordure-or);
+    border-radius: 1.5rem;
+    font-size: 0.88rem;
+}
+
+/* Espace entre l'icône et le texte dans un bouton */
+.bouton i {
+    margin-right: 0.6rem;
+}
+
+/* ===== 9. Étiquette dorée en haut d'une carte (ex : « PROJET D'AVENIR » dans competences.html) ===== */
+.etiquette-carte {
+    margin-bottom: 1rem;
+    color: var(--or);
+    font-size: 12px;          /* même taille que les autres étiquettes dorées */
+    font-weight: 500;
+    letter-spacing: var(--espacement-lettres);
+    text-transform: uppercase;
+}
+
+/* ===== 12. Certifications ===== */
+/* Texte caché à l'écran mais lu par les lecteurs d'écran (réutilisable partout) */
+.visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Une sous-partie : étiquette + titre serif dont un mot est en italique doré */
+.sous-partie + .sous-partie {
+    margin-top: 5rem;
+}
+
+.titre-sous-partie {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+.titre-sous-partie em {
+    font-style: italic;
+    color: var(--or);
+}
+
+/* Grilles : 1 colonne sur mobile (2 colonnes sur ordinateur, voir plus bas) */
+.grille-certifs,
+.grille-parcours {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Base commune des cartes de cette section */
+.carte-certif,
+.carte-liste {
+    padding: 2.25rem 1.5rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    transition: border-color 0.3s;
+}
+
+.carte-certif:hover,
+.carte-liste:hover {
+    border-color: var(--bordure-or);
+}
+
+/* Carte de formation : contenu centré, en colonne */
+.carte-certif {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.carte-certif h4 {
+    margin: 0 0 0.4rem;
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--texte);
+}
+
+.organisme {
+    margin-bottom: 0.4rem;
+    color: var(--texte-doux);
+    font-size: 0.85rem;
+}
+
+.date-certif {
+    margin-bottom: 1.5rem;
+    color: var(--or);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+}
+
+/* Les modules ANSSI : nom à gauche, score doré à droite, fines lignes */
+.modules {
+    width: 100%;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+    font-size: 0.82rem;
+}
+
+.modules li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--bordure);
+    color: var(--texte-doux);
+}
+
+.modules li:last-child {
+    border-bottom: 1px solid var(--bordure);
+}
+
+.score {
+    flex-shrink: 0; /* le score ne passe jamais à la ligne */
+    color: var(--or);
+    font-weight: 500;
+}
+
+/* L'image du certificat, tout en haut de la carte (à la place de la médaille) :
+   un clic ouvre le PDF dans un nouvel onglet */
+.image-certif {
+    display: block;
+    width: 100%;
+    margin-bottom: 1.5rem; /* espace avec le titre */
+    cursor: zoom-in; /* loupe : on peut cliquer pour voir le certificat en grand */
+}
+
+/* Hauteur fixe (220px sur mobile, 260px à partir de 768px) : les deux images
+   sont alignées côte à côte, chacune affichée en entier sur fond blanc */
+.image-certif img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    background-color: #fff;
+    border: 1px solid var(--bordure-or); /* fine bordure dorée transparente */
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); /* petite ombre */
+    transition: transform 0.3s ease;
+}
+
+/* Léger zoom au survol (et au clavier) */
+.image-certif:hover img,
+.image-certif:focus-visible img {
+    transform: scale(1.02);
+}
+
+/* Le bouton « Vérifier ↗ », poussé en bas de la carte */
+/* (même taille que tous les boutons du site, pour la cohérence) */
+.bouton-petit {
+    margin-top: auto;
+}
+
+/* Cartes Diplômes et Langues */
+.carte-liste h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.25rem;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--texte);
+}
+
+.carte-liste h4 i {
+    color: var(--or);
+    font-size: 1.05rem;
+}
+
+.lignes {
+    margin: 0;
+}
+
+/* Chaque ligne : sur mobile, le détail passe sous le nom */
+.lignes div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid var(--bordure);
+}
+
+.lignes dt {
+    color: var(--texte);
+    font-weight: 500;
+}
+
+.lignes dd {
+    margin: 0;
+    color: var(--or);
+    font-size: 0.85rem;
+}
+
+/* ===== 12 bis. Projets ===== */
+/* --- Les 2 colonnes : l'une sous l'autre sur mobile --- */
+.colonnes-projets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3.5rem 2rem;
+    margin-top: 3.5rem;
+}
+
+/* En-tête de colonne : icône dans un carré, titre, et compteur à droite */
+.entete-colonne {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+.icone-carre {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--fond);
+    border: 1px solid var(--bordure-or);
+    border-radius: 8px;
+    color: var(--or);
+}
+
+.entete-colonne h3 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.compteur-colonne {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto; /* pousse le compteur tout à droite */
+    border: 1px solid var(--bordure-or);
+    border-radius: 50%;
+    color: var(--or);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.sous-titre-colonne {
+    margin: 0 0 0 3.4rem; /* aligné avec le titre, après le carré */
+    color: var(--texte-doux);
+    font-size: 0.8rem;
+}
+
+.liste-projets {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--bordure);
+}
+
+/* --- Une carte de projet --- */
+.carte-projet-item {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* la zone visuelle suit les coins arrondis */
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    transition: border-color 0.3s;
+}
+
+.carte-projet-item:hover {
+    border-color: var(--bordure-or);
+}
+
+/* La zone visuelle en haut : dégradé sombre avec un léger halo doré au centre */
+.projet-visuel {
+    position: relative; /* repère pour le badge et le grand numéro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    height: 12rem;
+    padding: 1.5rem;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(201, 168, 106, 0.14), transparent 60%),
+        linear-gradient(160deg, rgba(201, 168, 106, 0.06), rgba(15, 17, 23, 0.9));
+    border-bottom: 1px solid var(--bordure);
+}
+
+.projet-visuel i {
+    color: var(--or);
+    font-size: 2.6rem;
+}
+
+.projet-visuel-titre {
+    margin: 0;
+    max-width: 26ch;
+    color: var(--texte-doux);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* Le badge « PROJET PERSO » / « EN STAGE » en haut à droite */
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.75rem;
+    background-color: rgba(201, 168, 106, 0.12);
+    border: 1px solid var(--bordure-or);
+    border-radius: 999px;
+    color: var(--or);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+/* Le grand numéro très transparent en bas à droite */
+.projet-numero {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.25rem;
+    font-family: var(--serif);
+    font-size: 4.5rem;
+    font-style: italic;
+    line-height: 1;
+    color: rgba(201, 168, 106, 0.15);
+}
+
+/* Variante avec un schéma : zone plus haute (220px sur mobile, 320px à partir de 768px)
+   et marges réduites pour que le cadre blanc prenne presque toute la place */
+.projet-visuel-image {
+    height: 220px;
+    padding: 0.75rem;
+}
+
+/* Le badge et le numéro passent par-dessus le schéma, même pendant le zoom au survol.
+   Le schéma est en « contain » : le badge tombe dans la bande blanche au-dessus du dessin,
+   et le numéro, très transparent, ne cache rien */
+.projet-visuel-image .badge,
+.projet-visuel-image .projet-numero {
+    z-index: 1;
+}
+
+/* Sur le fond blanc de l'image, le badge prend un fond sombre pour rester lisible */
+.projet-visuel-image .badge {
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: var(--fond-header);
+}
+
+/* Le cadre blanc autour du schéma (le schéma a un fond blanc) :
+   toute la largeur de la zone, 8px de marge intérieure */
+.cadre-schema {
+    flex: 1;
+    width: 100%;
+    min-height: 0; /* permet à l'image de rétrécir dans la hauteur fixe */
+    padding: 8px;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    cursor: zoom-in; /* loupe : on peut cliquer pour agrandir le schéma */
+    transition: transform 0.3s ease;
+}
+
+/* Léger zoom au survol (et au clavier) pour montrer que le schéma est cliquable */
+.cadre-schema:hover,
+.cadre-schema:focus-visible {
+    transform: scale(1.02);
+}
+
+/* Le schéma est affiché en entier, sans être coupé */
+.cadre-schema img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Variante avec un logo qui a déjà son propre fond (Zabbix) : pas de cadre blanc,
+   le logo est centré dans la zone (220px sur mobile, 320px à partir de 768px) */
+.projet-visuel-logo {
+    height: 220px;
+}
+
+.projet-visuel-logo img {
+    display: block;
+    width: 240px;
+    max-width: 100%; /* ne déborde jamais de la zone sur un petit écran */
+    height: auto;
+    border-radius: 6px; /* coins légèrement arrondis */
+}
+
+/* Variante « couverture » : la photo remplit toute la zone, sans cadre ni marge
+   (220px sur mobile, 320px à partir de 768px, comme les zones avec image) */
+.projet-visuel-couverture {
+    height: 220px;
+    padding: 0;
+}
+
+/* Le lien couvre toute la zone : un clic ouvre la photo en grand */
+.lien-couverture {
+    position: absolute;
+    inset: 0;
+    cursor: zoom-in; /* loupe : on peut cliquer pour agrandir la photo */
+}
+
+.lien-couverture img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Léger dégradé sombre en bas de la photo pour que le numéro reste lisible */
+.lien-couverture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 45%, rgba(15, 17, 23, 0.7));
+    pointer-events: none;
+}
+
+/* Le badge, la source et le numéro passent par-dessus la photo */
+.projet-visuel-couverture .badge,
+.projet-visuel-couverture .source-image,
+.projet-visuel-couverture .projet-numero {
+    z-index: 1;
+}
+
+/* Sur la photo, le badge prend un fond sombre pour rester lisible */
+.projet-visuel-couverture .badge {
+    background-color: var(--fond-header);
+}
+
+/* La source de l'image, en tout petit et en gris, dans le coin bas à gauche */
+.source-image {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.75rem;
+    color: var(--texte-doux);
+    font-size: 11px;
+    pointer-events: none; /* le clic passe à la photo en dessous */
+}
+
+/* Le contenu texte de la carte : il prend toute la hauteur libre */
+.projet-corps {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.periode {
+    margin-bottom: 0.4rem;
+    color: var(--texte-doux);
+    font-size: 0.75rem;
+}
+
+.projet-corps h4 {
+    margin: 0 0 0.75rem;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--texte);
+}
+
+.projet-corps > p:not(.periode) {
+    margin-bottom: 1.25rem;
+    color: var(--texte-doux);
+    font-size: 0.92rem;
+}
+
+/* Étiquettes avec un petit point doré devant */
+.tags-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tags-points li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--texte);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.tags-points li::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--or);
+}
+
+/* Le bas de la carte, séparé par une fine ligne */
+.projet-pied {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--bordure);
+}
+
+.bouton-preuves {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--bordure-forte);
+    border-radius: 999px;
+    color: var(--texte-doux);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.25s, color 0.25s;
+}
+
+.bouton-preuves:hover {
+    border-color: var(--or);
+    color: var(--or);
+}
+
+.bouton-preuves i {
+    color: var(--or);
+}
+
+/* Le petit compteur de preuves */
+.compteur-preuves {
+    display: grid;
+    place-items: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 0.3rem;
+    background-color: rgba(201, 168, 106, 0.15);
+    border-radius: 999px;
+    color: var(--or);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+/* ===== 12 ter. Expériences : frise verticale ===== */
+/* La frise : la liste laisse une marge à gauche pour la ligne et les points */
+.frise {
+    position: relative; /* repère pour la ligne verticale */
+    margin: 0;
+    padding: 0 0 0 2.25rem;
+    list-style: none;
+}
+
+/* La fine ligne dorée verticale, qui s'estompe vers le bas */
+.frise::before {
+    content: "";
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0;
+    left: calc(0.55rem - 0.5px); /* centrée sous les points */
+    width: 1px;
+    background: linear-gradient(to bottom, var(--or), var(--bordure-or) 70%, transparent);
+}
+
+/* Une étape de la frise */
+.etape-frise {
+    position: relative; /* repère pour le point */
+    padding-bottom: 4rem;
+}
+
+.etape-frise:last-child {
+    padding-bottom: 0;
+}
+
+/* Le point doré entouré d'un cercle, posé sur la ligne */
+.etape-frise::before {
+    content: "";
+    position: absolute;
+    top: 0.55rem;
+    left: -2.25rem;      /* revient dans la marge de gauche de la frise */
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid var(--or);
+    border-radius: 50%;
+    /* un petit disque doré au centre, entouré du fond sombre */
+    background: radial-gradient(circle, var(--or) 0 3px, var(--fond) 3.5px);
+    box-shadow: 0 0 0 5px rgba(201, 168, 106, 0.1); /* halo doré très léger */
+}
+
+/* En-tête d'une étape : titre puis badge (en dessous sur mobile) */
+.frise-entete {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 0.9rem;
+}
+
+.frise-entete h3 {
+    margin: 0;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    color: var(--texte);
+}
+
+/* Badge arrondi à bordure dorée, avec icône */
+.badge-frise {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--bordure-or);
+    border-radius: 999px;
+    color: var(--or);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Ligne d'infos : date et lieu, avec icônes dorées */
+.frise-infos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    margin: 0 0 1.1rem;
+    padding: 0;
+    list-style: none;
+    color: var(--texte-doux);
+    font-size: 0.82rem;
+}
+
+.frise-infos li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.frise-infos i {
+    color: var(--or);
+}
+
+.etape-frise > p {
+    max-width: 70ch;
+    color: var(--texte-doux);
+}
+
+/* Grille des missions : 1 colonne sur mobile (2 et 3 colonnes plus bas) */
+.missions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Une petite carte de mission : icône à gauche, texte à droite */
+.missions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.1rem 1.2rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: 12px;
+    color: var(--texte-doux);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    transition: border-color 0.3s;
+}
+
+.missions li:hover {
+    border-color: var(--bordure-or);
+}
+
+.missions i {
+    flex-shrink: 0;
+    width: 1.1rem;
+    margin-top: 0.2rem;
+    text-align: center;
+    color: var(--or);
+}
+
+/* Les mots-clés en gras blanc */
+.missions strong {
+    color: var(--texte);
+    font-weight: 700;
+}
+
+/* ===== 13. Contact ===== */
+#contact {
+    padding-bottom: 7rem;
+}
+
+/* Les 2 colonnes : l'une sous l'autre sur mobile */
+.contact-colonnes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+.contact-texte {
+    color: var(--texte-doux);
+}
+
+/* --- Carte des coordonnées --- */
+.carte-contact {
+    margin: 1.75rem 0 1.25rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    font-style: normal; /* le navigateur met <address> en italique par défaut */
+}
+
+.carte-contact ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Fine ligne entre chaque coordonnée */
+.carte-contact li + li {
+    border-top: 1px solid var(--bordure);
+}
+
+/* Une ligne : icône dorée, texte blanc, petite icône de lien à droite */
+.ligne-contact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    color: var(--texte);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.25s;
+}
+
+a.ligne-contact:hover {
+    color: var(--or);
+}
+
+.ligne-contact > i:first-child {
+    width: 1.1rem;
+    text-align: center;
+    color: var(--or);
+}
+
+.ligne-contact span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere; /* l'adresse e-mail peut passer à la ligne sur petit écran */
+}
+
+.icone-lien {
+    color: var(--texte-doux);
+    font-size: 0.75rem;
+}
+
+/* Bouton sur toute la largeur (CV et envoi du formulaire) */
+.bouton-large {
+    display: block;
+    width: 100%;
+}
+
+/* Un <button> n'hérite pas de la police : on la lui redonne, et un curseur main */
+button.bouton {
+    font-family: var(--sans);
+    cursor: pointer;
+}
+
+/* --- Formulaire --- */
+.formulaire {
+    display: grid;
+    gap: 1.25rem;
+}
+
+/* Nom et e-mail : l'un sous l'autre sur mobile, côte à côte sur ordinateur */
+.champs-duo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Étiquette en petites majuscules espacées grises */
+.champ label {
+    color: var(--texte-doux);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: var(--espacement-lettres);
+    text-transform: uppercase;
+}
+
+/* L'astérisque des champs obligatoires */
+.obligatoire {
+    color: var(--or);
+}
+
+/* Les champs : fond légèrement plus clair, bordure fine, coins arrondis */
+.champ input,
+.champ textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure-forte);
+    border-radius: 10px;
+    color: var(--texte);
+    font-family: var(--sans);
+    font-size: 1rem; /* 16 px minimum : évite le zoom automatique sur iPhone */
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.champ textarea {
+    min-height: 9rem;
+    resize: vertical; /* on peut agrandir le message en hauteur seulement */
+}
+
+.champ input::placeholder,
+.champ textarea::placeholder {
+    color: rgba(238, 234, 226, 0.35);
+}
+
+/* Au focus : bordure dorée et halo doré léger (remplace le contour par défaut) */
+.champ input:focus,
+.champ textarea:focus {
+    outline: none;
+    border-color: var(--or);
+    box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.15);
+}
+
+/* Contour doré au clavier sur les boutons */
+button:focus-visible {
+    outline: 1px solid var(--or);
+    outline-offset: 4px;
+}
+
+.note-formulaire {
+    margin: -0.25rem 0 0;
+    color: var(--texte-doux);
+    font-size: 0.78rem;
+    text-align: center;
+}
+
+/* ===== 14. Footer simple ===== */
+/* Sur mobile : les 2 textes centrés l'un sous l'autre */
+footer {
+    padding: 2.5rem var(--marge-conteneur); /* aligné sur le conteneur, comme le header */
+    border-top: 1px solid var(--bordure);
+    color: var(--texte-doux);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.footer-contenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* ===== 15. Bouton rond « remonter en haut » ===== */
+/* Caché par défaut ; le JavaScript ajoute la classe « visible » après un peu de défilement */
+.retour-haut {
+    position: fixed;
+    right: 1.25rem;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--or);
+    border-radius: 50%;
+    background-color: var(--fond-header);
+    color: var(--or);
+    font-size: 1.1rem;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;        /* aussi retiré de la navigation au clavier */
+    transform: translateY(10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background-color 0.25s, color 0.25s;
+}
+
+.retour-haut.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.retour-haut:hover {
+    background-color: var(--or);
+    color: var(--fond);
+}
+
+/* ===== 16. Tablettes et plus (à partir de 768 px de large) ===== */
+@media (min-width: 768px) {
+    /* Plus d'espace vertical entre les sections (avant : 128px) ;
+       les marges à gauche et à droite viennent de la gouttière */
+    section {
+        padding-top: 150px;
+        padding-bottom: 150px;
+    }
+
+    /* Les boutons de l'accroche restent sur une seule ligne */
+    #accueil .boutons {
+        flex-wrap: nowrap;
+    }
+
+    /* Les cases d'informations : 32px de marge intérieure */
+    .infos div {
+        padding: 32px;
+    }
+
+    /* La zone du schéma Cisco est plus haute sur grand écran (220px sur mobile) */
+    .projet-visuel-image {
+        height: 320px;
+    }
+
+    /* La photo de couverture a la même hauteur que les zones avec image (220px sur mobile) */
+    .projet-visuel-couverture {
+        height: 320px;
+    }
+
+    /* La zone du logo Zabbix a la même hauteur que les autres zones avec image */
+    .projet-visuel-logo {
+        height: 320px;
+    }
+
+    /* Les images des certificats sont plus hautes sur grand écran (220px sur mobile) */
+    .image-certif img {
+        height: 260px;
+    }
+
+    /* Compétences : les cartes en 2 colonnes */
+    .grille-competences {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .carte-intro {
+        padding: 2.5rem;
+    }
+
+    .carte-projet {
+        padding: 3.5rem 3rem;
+    }
+
+    /* Le parcours sur une ligne, flèche vers la droite */
+    .parcours,
+    .parcours li {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .parcours li + li::before {
+        margin-left: 0;
+        transform: none;
+    }
+
+    /* Frise : le badge passe à droite du titre, les missions en 2 colonnes */
+    .frise {
+        padding-left: 3rem;
+    }
+
+    .etape-frise::before {
+        left: -3rem;
+    }
+
+    .frise-entete {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .badge-frise {
+        margin-top: 0.4rem;
+    }
+
+    .missions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Footer : un texte à gauche, l'autre à droite */
+    .footer-contenu {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+/* ===== 17. Header à partir de 900 px : le bouton « Me contacter » apparaît ===== */
+@media (min-width: 900px) {
+    header .bouton-header {
+        display: inline-block;
+    }
+}
+
+/* ===== 17 bis. Ordinateurs (à partir de 1024 px de large) ===== */
+@media (min-width: 1024px) {
+    /* --- Header sur une ligne : logo à gauche, menu au centre, bouton à droite ---
+       (entre 900 et 1023px, le menu reste sous le logo : il ne tient pas à côté) */
+    html {
+        scroll-padding-top: 7rem; /* le header ne fait plus que 2 lignes */
+    }
+
+    /* Plus de marge en bas : c'est la hauteur des liens qui fait la ligne logo + menu (environ 64px) */
+    header {
+        padding-bottom: 0;
+    }
+
+    /* 20px en haut et en bas de chaque lien + la hauteur du texte = environ 64px */
+    nav a {
+        padding: 20px 0;
+    }
+
+    /* Le soulignement, juste sous le texte */
+    nav a::after {
+        bottom: 14px;
+    }
+
+    /* Le menu peut rétrécir (min-width: 0) : s'il manque de la place (zoom du navigateur,
+       police plus large…), c'est lui qui défile, et le bouton n'est jamais poussé hors de l'écran */
+    nav {
+        order: 0;
+        flex: 0 1 auto;
+        width: auto;
+        min-width: 0;
+        margin: -6px 0;        /* compense le padding du menu ci-dessous */
+        overflow-x: auto;
+    }
+
+    /* 6px en haut et en bas : le contour doré du focus clavier n'est pas coupé par le défilement */
+    nav ul {
+        padding: 6px 0;
+    }
+
+    /* Le logo et le bouton gardent toujours leur taille : ils ne rétrécissent jamais */
+    .logo,
+    header .bouton-header {
+        flex-shrink: 0;
+    }
+
+    /* --- Mise en page des sections --- */
+    /* À propos : 2 colonnes, environ 40 % (titre) et 60 % (texte et infos) */
+    .a-propos {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        gap: 5rem;
+    }
+
+    /* Certifications : 2 cartes côte à côte */
+    .grille-certifs,
+    .grille-parcours {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .carte-certif,
+    .carte-liste {
+        padding: 2.75rem 2.5rem;
+    }
+
+    /* Diplômes et langues : le nom à gauche, le détail à droite */
+    .lignes div {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1.5rem;
+    }
+
+    .lignes dd {
+        text-align: right;
+    }
+
+    /* Compétences : les cartes en 3 colonnes */
+    .grille-competences {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Projets : les 2 colonnes côte à côte */
+    .colonnes-projets {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Description des projets : 3 lignes maximum sur ordinateur
+       (au-delà, le texte est coupé avec « … ») */
+    .projet-corps > p:not(.periode) {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        overflow: hidden;
+    }
+
+    /* Expériences : les missions en 3 colonnes */
+    .missions {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Contact : coordonnées à gauche, formulaire à droite */
+    .contact-colonnes {
+        grid-template-columns: 1fr 1.35fr;
+        gap: 4rem;
+    }
+
+    /* Nom et e-mail côte à côte */
+    .champs-duo {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===== 18. Accessibilité : pas d'animation si l'utilisateur l'a demandé ===== */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+
+    .bouton-plein:hover,
+    .retour-haut {
+        transform: none;
+    }
+}
+
+/* ===== 19. Transitions entre les pages ===== */
+
+/* --- Écran de chargement : couvre la page à l'arrivée ---
+   Il disparaît tout seul grâce à une animation CSS : même sans JavaScript,
+   le contenu n'est jamais bloqué derrière. */
+.ecran-chargement {
+    position: fixed;
+    inset: 0;                 /* couvre tout l'écran */
+    z-index: 100;             /* au-dessus du header et de la barre de progression */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--fond);
+    /* attend 0,45 s (le temps de remplir la barre), puis sort en 0,35 s : 0,8 s au total */
+    animation: ecran-sortie 0.35s cubic-bezier(0.7, 0, 0.3, 1) 0.45s forwards;
+}
+
+/* Les 3 petits points dorés, au centre */
+.ecran-points {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.ecran-points span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--or);
+    opacity: 0.25;
+    /* chaque point s'allume puis s'éteint, en boucle */
+    animation: point-allume 0.6s ease-in-out infinite;
+}
+
+/* Décalage : les points s'allument l'un après l'autre */
+.ecran-points span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.ecran-points span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* La fine barre de 2 px tout en haut de l'écran : un rail très discret, rempli en doré par son ::after */
+.ecran-barre {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    overflow: hidden;
+    background-color: var(--bordure);
+}
+
+.ecran-barre::after {
+    content: "";
+    display: block;
+    height: 100%;
+    background-color: var(--or);
+    transform: scaleX(0);
+    transform-origin: left;   /* se remplit de gauche à droite */
+    animation: barre-remplissage 0.45s ease-in-out forwards;
+}
+
+/* Un point passe de presque éteint à allumé (un peu plus gros), puis revient */
+@keyframes point-allume {
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    40%      { opacity: 1;    transform: scale(1); }
+}
+
+/* La barre passe de 0 % à 100 % de sa largeur */
+@keyframes barre-remplissage {
+    to { transform: scaleX(1); }
+}
+
+/* L'écran remonte en fondu ; visibility: hidden le rend « transparent » aux clics */
+@keyframes ecran-sortie {
+    to { opacity: 0; transform: translateY(-100%); visibility: hidden; }
+}
+
+/* --- En quittant une page : l'écran revient en fondu rapide (classe ajoutée par le JavaScript) --- */
+.ecran-chargement.sortie {
+    animation: ecran-retour 0.3s ease-in forwards;
+}
+
+@keyframes ecran-retour {
+    from { opacity: 0; transform: none; visibility: visible; }
+    to   { opacity: 1; transform: none; visibility: visible; }
+}
+
+/* Retour arrière avec le bouton du navigateur : l'écran est retiré immédiatement */
+.ecran-chargement.cache {
+    display: none;
+}
+
+/* --- Apparition du contenu ---
+   Les éléments ne sont cachés que si le JavaScript a ajouté la classe « js-anim » sur <html> :
+   sans JavaScript, tout reste visible normalement. */
+.js-anim .apparition {
+    opacity: 0;
+    transform: translateY(18px);
+    /* border-color et color : on garde les effets de survol des cartes et de l'icône e-mail */
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, color 0.25s;
+}
+
+.js-anim .apparition.est-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* --- Bonus : fondu natif entre les pages (navigateurs récents) ---
+   Seulement si l'utilisateur n'a pas demandé à réduire les mouvements */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+/* --- Accessibilité : aucune animation si l'utilisateur l'a demandé --- */
+@media (prefers-reduced-motion: reduce) {
+    .ecran-chargement {
+        display: none;
+    }
+
+    .js-anim .apparition {
+        opacity: 1;
+        transform: none;
+    }
+}

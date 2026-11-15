@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Certifications — Fouad El Mamouni</title>
+    <meta name="description" content="Certifications de Fouad El Mamouni : Introduction to Cybersecurity (Cisco Networking Academy), MOOC SecNumacadémie (ANSSI), diplômes et langues.">
+    <meta name="theme-color" content="#0F1117">
+
+    <!-- Open Graph : aperçu lors d'un partage sur les réseaux sociaux -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Certifications — Fouad El Mamouni">
+    <meta property="og:description" content="Certifications de Fouad El Mamouni : Introduction to Cybersecurity (Cisco Networking Academy), MOOC SecNumacadémie (ANSSI), diplômes et langues.">
+    <meta property="og:locale" content="fr_FR">
+    <!-- À compléter quand le site sera en ligne :
+    <meta property="og:url" content="https://votre-domaine.fr/certifications.html">
+    <meta property="og:image" content="https://votre-domaine.fr/apercu.png">
+    -->
+
+    <!-- Google Fonts : Cormorant Garamond (titres) et DM Sans (texte, menu, boutons) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (version gratuite) : les icônes, chargées depuis le CDN cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Feuille de style commune à toutes les pages -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Écran de chargement : il disparaît tout seul en CSS, même sans JavaScript -->
+    <div class="ecran-chargement" aria-hidden="true">
+        <div class="ecran-points"><span></span><span></span><span></span></div>
+        <div class="ecran-barre"></div>
+    </div>
+
+    <!-- Barre dorée qui avance pendant le défilement (décorative) -->
+    <div class="barre-progression" aria-hidden="true"></div>
+
+    <header>
+        <p class="etiquette etiquette-header">Portfolio — BTS SIO SISR</p>
+        <a href="index.html" class="logo">Fouad<span>.</span></a>
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html" class="actif" aria-current="page">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="contact.html" class="bouton bouton-contour bouton-header">Me contacter</a>
+    </header>
+
+    <main>
+        <section id="certifications">
+            <!-- 1. En-tête -->
+            <p class="etiquette">Cisco · ANSSI</p>
+            <h1 class="titre-page">Certifications</h1>
+            <p class="intro-section">Formations en cybersécurité validées auprès de Cisco Networking Academy et de l'ANSSI. Chaque document est consultable en PDF.</p>
+
+            <!-- 2. Formations obtenues -->
+            <div class="sous-partie">
+                <p class="etiquette">Obtenues &amp; consultables</p>
+                <h3 class="titre-sous-partie">Mes <em>formations</em></h3>
+
+                <div class="grille-certifs">
+                    <article class="carte-certif">
+                        <a href="certificats/cisco-introduction-cybersecurity.pdf" target="_blank" rel="noopener" class="image-certif">
+                            <img src="certificats/cisco-introduction-cybersecurity.png" alt="Certificat Cisco Networking Academy Introduction to Cybersecurity de Fouad El Mamouni, obtenu le 23 janvier 2026" loading="lazy">
+                            <span class="visuellement-cache">(ouvre le PDF dans un nouvel onglet)</span>
+                        </a>
+                        <h4>Introduction to Cybersecurity</h4>
+                        <p class="organisme">Cisco Networking Academy</p>
+                        <p class="date-certif"><time datetime="2026-01-23">23 janvier 2026</time></p>
+                        <a href="certificats/cisco-introduction-cybersecurity.pdf" target="_blank" rel="noopener" class="bouton bouton-contour bouton-petit">
+                            Vérifier <span aria-hidden="true">↗</span>
+                            <span class="visuellement-cache">le certificat Cisco (PDF, nouvel onglet)</span>
+                        </a>
+                    </article>
+
+                    <article class="carte-certif">
+                        <a href="certificats/anssi-secnumacademie.pdf" target="_blank" rel="noopener" class="image-certif">
+                            <img src="certificats/anssi-secnumacademie.png" alt="Attestation de suivi du MOOC SecNumacadémie de l'ANSSI de Fouad El Mamouni, 4 modules validés le 18 janvier 2026" loading="lazy">
+                            <span class="visuellement-cache">(ouvre le PDF dans un nouvel onglet)</span>
+                        </a>
+                        <h4>MOOC SecNumacadémie</h4>
+                        <p class="organisme">ANSSI — attestation de suivi</p>
+                        <p class="date-certif"><time datetime="2026-01-18">18 janvier 2026</time></p>
+                        <ul class="modules" aria-label="Modules validés">
+                            <li><span>Panorama de la SSI</span> <span class="score">86 %</span></li>
+                            <li><span>Sécurité de l'authentification</span> <span class="score">72 %</span></li>
+                            <li><span>Sécurité sur Internet</span> <span class="score">94 %</span></li>
+                            <li><span>Sécurité du poste de travail et nomadisme</span> <span class="score">88 %</span></li>
+                        </ul>
+                        <a href="certificats/anssi-secnumacademie.pdf" target="_blank" rel="noopener" class="bouton bouton-contour bouton-petit">
+                            Vérifier <span aria-hidden="true">↗</span>
+                            <span class="visuellement-cache">l'attestation ANSSI (PDF, nouvel onglet)</span>
+                        </a>
+                    </article>
+                </div>
+            </div>
+
+            <!-- 3. Diplômes et langues -->
+            <div class="sous-partie">
+                <p class="etiquette">Parcours</p>
+                <h3 class="titre-sous-partie">Diplômes &amp; <em>langues</em></h3>
+
+                <div class="grille-parcours">
+                    <div class="carte-liste">
+                        <h4><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Diplômes</h4>
+                        <dl class="lignes">
+                            <div>
+                                <dt>BTS SIO option SISR</dt>
+                                <dd>Institut IEF2I, Vincennes — en cours (2025–2027)</dd>
+                            </div>
+                            <div>
+                                <dt>Baccalauréat Sciences Physiques</dt>
+                                <dd>Lycée Benali, Oujda (Maroc) — mention Très bien (2025)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <div class="carte-liste">
+                        <h4><i class="fa-solid fa-language" aria-hidden="true"></i> Langues</h4>
+                        <dl class="lignes">
+                            <div>
+                                <dt>Arabe</dt>
+                                <dd>langue maternelle</dd>
+                            </div>
+                            <div>
+                                <dt>Français</dt>
+                                <dd>courant</dd>
+                            </div>
+                            <div>
+                                <dt>Anglais</dt>
+                                <dd>intermédiaire</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-contenu">
+            <p>&copy; 2026 Fouad El Mamouni</p>
+            <p>BTS SIO option SISR · IEF2I Vincennes</p>
+        </div>
+    </footer>
+
+    <!-- Bouton rond pour remonter (c'est un lien : il fonctionne même sans JavaScript) -->
+    <a href="#top" class="retour-haut" aria-label="Remonter en haut de la page">↑</a>
+
+    <!-- Script commun à toutes les pages -->
+    <script src="script.js"></script>
+
+</body>
+</html>

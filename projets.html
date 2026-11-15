@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projets — Fouad El Mamouni</title>
+    <meta name="description" content="Projets de Fouad El Mamouni réalisés en BTS SIO SISR et en stage : serveur GLPI, infrastructure pfSense en haute disponibilité, architecture segmentée et supervisée.">
+    <meta name="theme-color" content="#0F1117">
+
+    <!-- Open Graph : aperçu lors d'un partage sur les réseaux sociaux -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Projets — Fouad El Mamouni">
+    <meta property="og:description" content="Projets de Fouad El Mamouni réalisés en BTS SIO SISR et en stage : serveur GLPI, infrastructure pfSense en haute disponibilité, architecture segmentée et supervisée.">
+    <meta property="og:locale" content="fr_FR">
+    <!-- À compléter quand le site sera en ligne :
+    <meta property="og:url" content="https://votre-domaine.fr/projets.html">
+    <meta property="og:image" content="https://votre-domaine.fr/apercu.png">
+    -->
+
+    <!-- Google Fonts : Cormorant Garamond (titres) et DM Sans (texte, menu, boutons) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (version gratuite) : les icônes, chargées depuis le CDN cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Feuille de style commune à toutes les pages -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Écran de chargement : il disparaît tout seul en CSS, même sans JavaScript -->
+    <div class="ecran-chargement" aria-hidden="true">
+        <div class="ecran-points"><span></span><span></span><span></span></div>
+        <div class="ecran-barre"></div>
+    </div>
+
+    <!-- Barre dorée qui avance pendant le défilement (décorative) -->
+    <div class="barre-progression" aria-hidden="true"></div>
+
+    <header>
+        <p class="etiquette etiquette-header">Portfolio — BTS SIO SISR</p>
+        <a href="index.html" class="logo">Fouad<span>.</span></a>
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html" class="actif" aria-current="page">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="contact.html" class="bouton bouton-contour bouton-header">Me contacter</a>
+    </header>
+
+    <main>
+        <section id="projets">
+            <!-- 1. En-tête -->
+            <p class="etiquette">Réalisations</p>
+            <h1 class="titre-page">Mes <em>Projets</em></h1>
+            <p class="intro-section">Projets réalisés pendant ma formation BTS SIO SISR et mon stage en entreprise, classés par contexte.</p>
+
+            <!-- 2. Les deux colonnes -->
+            <div class="colonnes-projets">
+
+                <!-- Colonne 1 : projets personnels -->
+                <div>
+                    <div class="entete-colonne">
+                        <span class="icone-carre" aria-hidden="true"><i class="fa-solid fa-graduation-cap"></i></span>
+                        <h3>Projets personnels</h3>
+                        <span class="compteur-colonne">3<span class="visuellement-cache"> projets</span></span>
+                    </div>
+                    <p class="sous-titre-colonne">Formation BTS SIO SISR</p>
+
+                    <div class="liste-projets">
+                        <article class="carte-projet-item">
+                            <div class="projet-visuel projet-visuel-image">
+                                <span class="badge">Projet perso</span>
+                                <a href="images/glpi.png" class="cadre-schema" target="_blank" rel="noopener">
+                                    <img src="images/glpi.png" alt="Logo de GLPI, logiciel de gestion de parc informatique et de support" loading="lazy">
+                                    <span class="visuellement-cache">(ouvre l'image en grand dans un nouvel onglet)</span>
+                                </a>
+                                <span class="projet-numero" aria-hidden="true">01</span>
+                            </div>
+                            <div class="projet-corps">
+                                <h4>Serveur d'inventaire GLPI</h4>
+                                <p>Serveur GLPI relié à Active Directory via LDAP pour importer les utilisateurs. Attribution des profils (Super-Admin, Technicien, Self-Service) et traitement complet d'un ticket, de sa création à sa clôture.</p>
+                                <ul class="tags-points">
+                                    <li>GLPI</li>
+                                    <li>LDAP</li>
+                                    <li>Active Directory</li>
+                                    <li>Tickets</li>
+                                </ul>
+                            </div>
+                            <div class="projet-pied">
+                                <!-- LIEN À AJOUTER : remplace # par le lien vers les preuves du projet GLPI (PDF, captures d'écran...) et mets à jour le compteur -->
+                                <a href="#" class="bouton-preuves">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i> Preuves
+                                    <span class="compteur-preuves">0</span>
+                                    <span class="visuellement-cache">du projet Serveur d'inventaire GLPI</span>
+                                </a>
+                            </div>
+                        </article>
+
+                        <article class="carte-projet-item">
+                            <div class="projet-visuel projet-visuel-image">
+                                <span class="badge">Projet perso</span>
+                                <a href="images/pfsense-ha-general.png" class="cadre-schema" target="_blank" rel="noopener">
+                                    <img src="images/pfsense-ha-general.png" alt="Illustration de la haute disponibilité pfSense : deux pare-feux, maître actif et secours en veille, synchronisés et partageant des IP virtuelles CARP, devant un réseau local de postes et de serveurs" loading="lazy">
+                                    <span class="visuellement-cache">(ouvre l'image en grand dans un nouvel onglet)</span>
+                                </a>
+                                <span class="projet-numero" aria-hidden="true">02</span>
+                            </div>
+                            <div class="projet-corps">
+                                <h4>Haute disponibilité réseau avec pfSense (CARP) et Active Directory</h4>
+                                <p>Deux pare-feux pfSense en haute disponibilité avec CARP, assurant le routage, le DHCP et le DNS. Active Directory sur Windows Server 2022, serveur web Apache intégré au domaine et supervision Zabbix.</p>
+                                <ul class="tags-points">
+                                    <li>pfSense</li>
+                                    <li>CARP</li>
+                                    <li>Windows Server</li>
+                                    <li>Apache</li>
+                                </ul>
+                            </div>
+                            <div class="projet-pied">
+                                <!-- LIEN À AJOUTER : remplace # par le lien vers les preuves du projet d'infrastructure (PDF, captures d'écran...) et mets à jour le compteur -->
+                                <a href="#" class="bouton-preuves">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i> Preuves
+                                    <span class="compteur-preuves">0</span>
+                                    <span class="visuellement-cache">du projet Haute disponibilité réseau avec pfSense (CARP) et Active Directory</span>
+                                </a>
+                            </div>
+                        </article>
+
+                        <article class="carte-projet-item">
+                            <div class="projet-visuel projet-visuel-image">
+                                <span class="badge">Projet perso</span>
+                                <a href="images/tp-routage-intervlan.png" class="cadre-schema" target="_blank" rel="noopener">
+                                    <img src="images/tp-routage-intervlan.png" alt="Schéma Cisco Packet Tracer : VLAN 2 Étudiant et VLAN 3 Administration en trunk, routage inter-VLAN, routage statique, route par défaut vers le FAI, OSPF et DHCP sur routeur" loading="lazy">
+                                    <span class="visuellement-cache">(ouvre le schéma en grand dans un nouvel onglet)</span>
+                                </a>
+                                <span class="projet-numero" aria-hidden="true">03</span>
+                            </div>
+                            <div class="projet-corps">
+                                <h4>Routage inter-VLAN, OSPF, routage statique et DHCP sous Cisco Packet Tracer</h4>
+                                <p>Deux VLAN reliés en trunk, routage inter-VLAN avec des sous-interfaces sur un routeur Cisco. Routage statique, route par défaut, OSPF et DHCP configuré sur un routeur.</p>
+                                <ul class="tags-points">
+                                    <li>VLAN</li>
+                                    <li>Trunk</li>
+                                    <li>OSPF</li>
+                                    <li>DHCP</li>
+                                </ul>
+                            </div>
+                            <div class="projet-pied">
+                                <!-- LIEN À AJOUTER : remplace # par le lien vers les preuves du TP Cisco Packet Tracer (PDF, captures d'écran...) et mets à jour le compteur -->
+                                <a href="#" class="bouton-preuves">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i> Preuves
+                                    <span class="compteur-preuves">0</span>
+                                    <span class="visuellement-cache">du projet Routage inter-VLAN, OSPF, routage statique et DHCP sous Cisco Packet Tracer</span>
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Colonne 2 : fait en stage -->
+                <div>
+                    <div class="entete-colonne">
+                        <span class="icone-carre" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></span>
+                        <h3>Fait en stage</h3>
+                        <span class="compteur-colonne">2<span class="visuellement-cache"> projets</span></span>
+                    </div>
+                    <p class="sous-titre-colonne">Resotel&amp;Com, Créteil</p>
+
+                    <div class="liste-projets">
+                        <article class="carte-projet-item">
+                            <div class="projet-visuel projet-visuel-couverture">
+                                <a href="images/Stormshield.jpg" class="lien-couverture" target="_blank" rel="noopener">
+                                    <img src="images/Stormshield.jpg" alt="Pare-feux Stormshield de la gamme SN-L-Series" loading="lazy">
+                                    <span class="visuellement-cache">(ouvre la photo en grand dans un nouvel onglet)</span>
+                                </a>
+                                <span class="badge">En stage</span>
+                                <span class="source-image">Image : Stormshield</span>
+                                <span class="projet-numero" aria-hidden="true">04</span>
+                            </div>
+                            <div class="projet-corps">
+                                <p class="periode">Mai → Juin 2026 · 7 semaines</p>
+                                <h4>Infrastructure sécurisée multi-VLAN : Stormshield, SIEM Wazuh et supervision</h4>
+                                <p>Réseau segmenté en 2 VLAN et filtré par un pare-feu Stormshield SN160. Déploiement de Nextcloud, Active Directory, Zabbix et du SIEM Wazuh, qui reçoit les logs du pare-feu en temps réel.</p>
+                                <ul class="tags-points">
+                                    <li>Stormshield</li>
+                                    <li>VLAN</li>
+                                    <li>Wazuh</li>
+                                    <li>Active Directory</li>
+                                </ul>
+                            </div>
+                            <div class="projet-pied">
+                                <!-- LIEN À AJOUTER : remplace # par le lien vers les preuves de l'architecture du stage (PDF, captures d'écran...) et mets à jour le compteur -->
+                                <a href="#" class="bouton-preuves">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i> Preuves
+                                    <span class="compteur-preuves">0</span>
+                                    <span class="visuellement-cache">du projet Infrastructure sécurisée multi-VLAN : Stormshield, SIEM Wazuh et supervision</span>
+                                </a>
+                            </div>
+                        </article>
+
+                        <article class="carte-projet-item">
+                            <div class="projet-visuel projet-visuel-logo">
+                                <span class="badge">En stage</span>
+                                <img src="images/Zabbix_logo.png" alt="Logo de Zabbix, logiciel de supervision réseau open source" loading="lazy">
+                                <span class="projet-numero" aria-hidden="true">05</span>
+                            </div>
+                            <div class="projet-corps">
+                                <p class="periode">Mai → Juin 2026</p>
+                                <h4>Déploiement et sécurisation d'une infrastructure Zabbix</h4>
+                                <p>Installation d'un serveur de supervision Zabbix, ajout des équipements à surveiller et mise en place d'alertes.</p>
+                                <ul class="tags-points">
+                                    <li>Zabbix</li>
+                                    <li>Supervision</li>
+                                    <li>Alertes</li>
+                                </ul>
+                            </div>
+                            <div class="projet-pied">
+                                <!-- LIEN À AJOUTER : remplace # par le lien vers les preuves du projet Zabbix (PDF, captures d'écran...) et mets à jour le compteur -->
+                                <a href="#" class="bouton-preuves">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i> Preuves
+                                    <span class="compteur-preuves">0</span>
+                                    <span class="visuellement-cache">du projet Déploiement et sécurisation d'une infrastructure Zabbix</span>
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-contenu">
+            <p>&copy; 2026 Fouad El Mamouni</p>
+            <p>BTS SIO option SISR · IEF2I Vincennes</p>
+        </div>
+    </footer>
+
+    <!-- Bouton rond pour remonter (c'est un lien : il fonctionne même sans JavaScript) -->
+    <a href="#top" class="retour-haut" aria-label="Remonter en haut de la page">↑</a>
+
+    <!-- Script commun à toutes les pages -->
+    <script src="script.js"></script>
+
+</body>
+</html>

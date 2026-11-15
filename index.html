@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fouad El Mamouni — Portfolio BTS SIO SISR</title>
+    <meta name="description" content="Portfolio de Fouad El Mamouni, étudiant en 2e année de BTS SIO option SISR à l'IEF2I Vincennes : administration systèmes, réseaux et cybersécurité.">
+    <meta name="theme-color" content="#0F1117">
+
+    <!-- Open Graph : aperçu lors d'un partage sur les réseaux sociaux -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fouad El Mamouni — Portfolio BTS SIO SISR">
+    <meta property="og:description" content="Portfolio de Fouad El Mamouni, étudiant en 2e année de BTS SIO option SISR à l'IEF2I Vincennes : administration systèmes, réseaux et cybersécurité.">
+    <meta property="og:locale" content="fr_FR">
+    <!-- À compléter quand le site sera en ligne :
+    <meta property="og:url" content="https://votre-domaine.fr/index.html">
+    <meta property="og:image" content="https://votre-domaine.fr/apercu.png">
+    -->
+
+    <!-- Google Fonts : Cormorant Garamond (titres) et DM Sans (texte, menu, boutons) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (version gratuite) : les icônes, chargées depuis le CDN cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Feuille de style commune à toutes les pages -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Écran de chargement : il disparaît tout seul en CSS, même sans JavaScript -->
+    <div class="ecran-chargement" aria-hidden="true">
+        <div class="ecran-points"><span></span><span></span><span></span></div>
+        <div class="ecran-barre"></div>
+    </div>
+
+    <!-- Barre dorée qui avance pendant le défilement (décorative) -->
+    <div class="barre-progression" aria-hidden="true"></div>
+
+    <header>
+        <p class="etiquette etiquette-header">Portfolio — BTS SIO SISR</p>
+        <a href="index.html" class="logo">Fouad<span>.</span></a>
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="index.html" class="actif" aria-current="page">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="contact.html" class="bouton bouton-contour bouton-header">Me contacter</a>
+    </header>
+
+    <main>
+        <section id="accueil">
+            <h1><span>Fouad</span> <em>El</em> <span>Mamouni</span></h1>
+            <p class="presentation">Étudiant en 2<sup>e</sup> année de BTS SIO option SISR à l'IEF2I Vincennes. Passionné par l'administration des systèmes, des réseaux et la cybersécurité.</p>
+
+            <div class="boutons">
+                <a href="contact.html" class="bouton bouton-plein">Travaillons ensemble</a>
+                <a href="projets.html" class="bouton bouton-contour">Voir mes projets</a>
+                <!-- Téléchargement du CV : le fichier cv.pdf doit être à côté de index.html -->
+                <a href="cv.pdf" download class="bouton bouton-contour"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i>CV</a>
+            </div>
+
+            <!-- Icônes sociales : le texte lu par les lecteurs d'écran est dans aria-label -->
+            <ul class="icones-sociales">
+                <li>
+                    <!-- LIEN LINKEDIN À AJOUTER : remplace # par l'adresse de ton profil -->
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <!-- LIEN GITHUB À AJOUTER : remplace # par l'adresse de ton profil -->
+                    <a href="#" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="mailto:fouadmamouni50@gmail.com" aria-label="M'envoyer un e-mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+
+            <!-- Chiffres clés : le « + » doré est décoratif (aria-hidden) -->
+            <ul class="chiffres-cles">
+                <li>
+                    <span class="chiffre">2<span class="plus" aria-hidden="true">+</span></span>
+                    <span class="chiffre-texte">Ans de formation</span>
+                </li>
+                <li>
+                    <span class="chiffre">5<span class="plus" aria-hidden="true">+</span></span>
+                    <span class="chiffre-texte">Projets réalisés</span>
+                </li>
+                <li>
+                    <span class="chiffre">SISR</span>
+                    <span class="chiffre-texte">Spécialisation</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- À propos : 2 colonnes sur ordinateur (40 % / 60 %), 1 colonne sur mobile -->
+        <section id="a-propos" class="a-propos">
+            <!-- Colonne gauche : étiquette, titre et bouton -->
+            <div>
+                <p class="etiquette">À propos</p>
+                <h2>Réseaux &amp; <em>Systèmes</em></h2>
+                <a href="competences.html" class="bouton bouton-contour">Voir mes compétences <span aria-hidden="true">→</span></a>
+            </div>
+
+            <!-- Colonne droite : présentation et informations -->
+            <div class="a-propos-texte">
+                <p>Étudiant en 2<sup>e</sup> année de BTS SIO option SISR à l'Institut IEF2I de Vincennes, je me spécialise dans l'administration des systèmes et réseaux. Mon Bac Sciences Physiques, obtenu au Maroc avec mention Très bien, m'a donné de solides bases scientifiques avant d'entrer en BTS.</p>
+                <p>Rigoureux et curieux, j'approfondis chaque jour mes compétences en administration réseau, en cybersécurité et en virtualisation. Je recherche aujourd'hui une alternance afin de les mettre en pratique au sein d'une équipe informatique.</p>
+
+                <dl class="infos">
+                    <div>
+                        <dt>Formation</dt>
+                        <dd>BTS SIO SISR — IEF2I, Vincennes</dd>
+                    </div>
+                    <div>
+                        <dt>Spécialisation</dt>
+                        <dd>Administration &amp; Réseaux</dd>
+                    </div>
+                    <div>
+                        <dt>Localisation</dt>
+                        <dd>Île-de-France, France</dd>
+                    </div>
+                    <div>
+                        <dt>Année</dt>
+                        <dd>2<sup>e</sup> année (2025–2027)</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-contenu">
+            <p>&copy; 2026 Fouad El Mamouni</p>
+            <p>BTS SIO option SISR · IEF2I Vincennes</p>
+        </div>
+    </footer>
+
+    <!-- Bouton rond pour remonter (c'est un lien : il fonctionne même sans JavaScript) -->
+    <a href="#top" class="retour-haut" aria-label="Remonter en haut de la page">↑</a>
+
+    <!-- Script commun à toutes les pages -->
+    <script src="script.js"></script>
+
+</body>
+</html>
