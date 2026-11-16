@@ -37,6 +37,14 @@
 }
 
 /* À partir de 1200px : écart normal entre les liens du menu (36px) */
+/* De 1024 à 1099px, le header est sur une ligne mais l'espace est juste pour les 7 liens :
+   écart réduit pour que le bouton « Me contacter » ne passe pas à la ligne */
+@media (min-width: 1024px) and (max-width: 1099px) {
+    :root {
+        --ecart-menu: 12px;
+    }
+}
+
 @media (min-width: 1200px) {
     :root {
         --ecart-menu: 36px;
@@ -187,7 +195,7 @@ nav::-webkit-scrollbar {
 
 nav ul {
     display: flex;
-    gap: var(--ecart-menu);       /* 28px sur mobile, 22px de 900 à 1199px, 36px dès 1200px (voir :root) */
+    gap: var(--ecart-menu);       /* 28px sur mobile, 22px de 900 à 1199px (12px de 1024 à 1099px), 36px dès 1200px (voir :root) */
     width: max-content;           /* les liens restent sur une seule ligne */
     margin: 0;
     padding: 0 var(--gouttiere);  /* le 1er lien s'aligne sur le logo */
@@ -1456,6 +1464,157 @@ h2,
     font-weight: 700;
 }
 
+/* ===== 12 quater. Veille technologique ===== */
+/* Paragraphe de définition, en gris clair */
+.texte-veille {
+    max-width: 70ch;
+    margin-bottom: 2.5rem;
+    color: var(--texte-doux);
+}
+
+/* La carte arrondie autour du tableau : sur mobile, le tableau défile
+   horizontalement à l'intérieur, sans élargir la page */
+.tableau-defilant {
+    overflow-x: auto;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+/* Le tableau comparatif IPv4 / IPv6 */
+.tableau-comparatif {
+    width: 100%;
+    min-width: 560px; /* en dessous, la carte défile au lieu d'écraser les colonnes */
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.tableau-comparatif th,
+.tableau-comparatif td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--bordure); /* fines lignes entre les rangées */
+    vertical-align: top;
+}
+
+/* Pas de ligne sous la dernière rangée (la bordure de la carte suffit) */
+.tableau-comparatif tbody tr:last-child th,
+.tableau-comparatif tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Ligne d'en-tête : petites majuscules espacées */
+.tableau-comparatif thead th {
+    color: var(--texte-doux);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+/* Première colonne (les critères) en blanc */
+.tableau-comparatif tbody th {
+    color: var(--texte);
+    font-weight: 500;
+}
+
+/* Colonne IPv4 en gris clair */
+.tableau-comparatif td {
+    color: var(--texte-doux);
+}
+
+/* Colonne IPv6 en doré (en-tête compris) */
+.tableau-comparatif th:nth-child(3),
+.tableau-comparatif td:nth-child(3) {
+    color: var(--or);
+}
+
+/* Grille des enjeux : 1 colonne sur mobile (2 colonnes sur ordinateur, voir plus bas) */
+.grille-enjeux {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Une carte d'enjeu : icône dorée, titre blanc, texte gris clair */
+.carte-enjeu {
+    padding: 2rem 1.5rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    transition: border-color 0.3s;
+}
+
+.carte-enjeu:hover {
+    border-color: var(--bordure-or);
+}
+
+.carte-enjeu i {
+    display: block;
+    margin-bottom: 1.25rem;
+    color: var(--or);
+    font-size: 1.6rem;
+}
+
+.carte-enjeu h4 {
+    margin: 0 0 0.75rem;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--texte);
+}
+
+.carte-enjeu p {
+    margin: 0;
+    color: var(--texte-doux);
+    font-size: 0.92rem;
+}
+
+/* Encart « En résumé » : une carte avec une bordure dorée à gauche */
+.encart-resume {
+    margin-top: 2.5rem;
+    padding: 2rem 1.5rem;
+    background-color: var(--carte);
+    border: 1px solid var(--bordure);
+    border-left: 3px solid var(--or);
+    border-radius: 0 var(--rayon) var(--rayon) 0; /* le côté doré reste droit */
+}
+
+.encart-resume p:last-child {
+    margin: 0;
+    color: var(--texte);
+    font-size: 1.05rem;
+}
+
+/* Sources : en bas de la page, petit texte gris et liens dorés */
+.sources-veille {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--bordure);
+    color: var(--texte-doux);
+    font-size: 0.8rem;
+}
+
+.sources-veille ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sources-veille li + li {
+    margin-top: 0.6rem;
+}
+
+.sources-veille a {
+    color: var(--or);
+    overflow-wrap: anywhere; /* un long titre ne déborde jamais sur mobile */
+}
+
+.sources-veille a:hover {
+    text-decoration: underline;
+}
+
 /* ===== 13. Contact ===== */
 #contact {
     padding-bottom: 7rem;
@@ -1834,6 +1993,16 @@ footer p {
     .carte-certif,
     .carte-liste {
         padding: 2.75rem 2.5rem;
+    }
+
+    /* Veille : les 4 cartes d'enjeux en 2 colonnes */
+    .grille-enjeux {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .carte-enjeu,
+    .encart-resume {
+        padding: 2.5rem;
     }
 
     /* Diplômes et langues : le nom à gauche, le détail à droite */
