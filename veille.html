@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Veille technologique : la transition vers IPv6 — Fouad El Mamouni</title>
+    <meta name="description" content="Veille technologique de Fouad El Mamouni sur la transition vers IPv6 : définition d'IPv6, comparaison avec IPv4 et raisons de la transition (pénurie d'adresses, limites du NAT, objets connectés).">
+    <meta name="theme-color" content="#0F1117">
+
+    <!-- Open Graph : aperçu lors d'un partage sur les réseaux sociaux -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Veille technologique : la transition vers IPv6 — Fouad El Mamouni">
+    <meta property="og:description" content="Veille technologique de Fouad El Mamouni sur la transition vers IPv6 : définition d'IPv6, comparaison avec IPv4 et raisons de la transition (pénurie d'adresses, limites du NAT, objets connectés).">
+    <meta property="og:locale" content="fr_FR">
+    <!-- À compléter quand le site sera en ligne :
+    <meta property="og:url" content="https://votre-domaine.fr/veille.html">
+    <meta property="og:image" content="https://votre-domaine.fr/apercu.png">
+    -->
+
+    <!-- Google Fonts : Cormorant Garamond (titres) et DM Sans (texte, menu, boutons) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (version gratuite) : les icônes, chargées depuis le CDN cdnjs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Feuille de style commune à toutes les pages -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Écran de chargement : il disparaît tout seul en CSS, même sans JavaScript -->
+    <div class="ecran-chargement" aria-hidden="true">
+        <div class="ecran-points"><span></span><span></span><span></span></div>
+        <div class="ecran-barre"></div>
+    </div>
+
+    <!-- Barre dorée qui avance pendant le défilement (décorative) -->
+    <div class="barre-progression" aria-hidden="true"></div>
+
+    <header>
+        <p class="etiquette etiquette-header">Portfolio — BTS SIO SISR</p>
+        <a href="index.html" class="logo">Fouad<span>.</span></a>
+        <nav aria-label="Menu principal">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="veille.html" class="actif" aria-current="page">Veille</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="contact.html" class="bouton bouton-contour bouton-header">Me contacter</a>
+    </header>
+
+    <main>
+        <section id="veille">
+            <!-- 1. En-tête -->
+            <p class="etiquette">Veille technologique</p>
+            <h1 class="titre-page titre-2-lignes">La transition <em>vers IPv6</em></h1>
+            <p class="intro-section">Présentation du sujet : ce qu'est IPv6 et pourquoi la transition depuis IPv4 est nécessaire.</p>
+
+            <!-- 2. Définition et tableau comparatif -->
+            <div class="sous-partie">
+                <p class="etiquette">Définition</p>
+                <h3 class="titre-sous-partie">Qu'est-ce <em>qu'IPv6&nbsp;?</em></h3>
+                <p class="texte-veille">IPv6 (Internet Protocol version 6) est la nouvelle version du protocole IP, qui permet d'identifier et de faire communiquer les équipements sur un réseau. Il a été conçu pour remplacer IPv4, utilisé depuis les débuts d'Internet.</p>
+
+                <!-- Sur mobile, le tableau défile horizontalement dans sa carte -->
+                <div class="tableau-defilant" role="region" aria-label="Comparaison IPv4 et IPv6" tabindex="0">
+                    <table class="tableau-comparatif">
+                        <caption class="visuellement-cache">Comparaison entre IPv4 et IPv6</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Critère</th>
+                                <th scope="col">IPv4</th>
+                                <th scope="col">IPv6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Taille de l'adresse</th>
+                                <td>32 bits</td>
+                                <td>128 bits</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Nombre d'adresses</th>
+                                <td>environ 4,3 milliards</td>
+                                <td>environ 3,4 × 10<sup>38</sup></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Écriture</th>
+                                <td>4 nombres décimaux</td>
+                                <td>8 groupes hexadécimaux</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Exemple</th>
+                                <td>192.168.1.10</td>
+                                <td>2001:db8::1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Configuration</th>
+                                <td>manuelle ou DHCP</td>
+                                <td>automatique (SLAAC) ou DHCPv6</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Recours au NAT</th>
+                                <td>très courant</td>
+                                <td>plus nécessaire</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. Pourquoi la transition est nécessaire -->
+            <div class="sous-partie">
+                <p class="etiquette">Enjeux</p>
+                <h3 class="titre-sous-partie">Pourquoi <em>changer&nbsp;?</em></h3>
+
+                <div class="grille-enjeux">
+                    <article class="carte-enjeu">
+                        <i class="fa-solid fa-battery-empty" aria-hidden="true"></i>
+                        <h4>La pénurie d'adresses IPv4</h4>
+                        <p>Les 4,3 milliards d'adresses IPv4 ne suffisent plus face au nombre d'appareils connectés. Le stock central de l'IANA a été épuisé en 2011, et le registre européen RIPE NCC a distribué ses derniers blocs en 2019.</p>
+                    </article>
+
+                    <article class="carte-enjeu">
+                        <i class="fa-solid fa-shuffle" aria-hidden="true"></i>
+                        <h4>Les limites du NAT</h4>
+                        <p>Pour économiser les adresses, le NAT fait partager une seule adresse publique à plusieurs machines. Cette solution complique les connexions directes entre équipements et certains services.</p>
+                    </article>
+
+                    <article class="carte-enjeu">
+                        <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+                        <h4>L'explosion des objets connectés</h4>
+                        <p>Smartphones, objets connectés, véhicules, capteurs : IPv6 offre assez d'adresses pour que chaque équipement ait la sienne.</p>
+                    </article>
+
+                    <article class="carte-enjeu">
+                        <i class="fa-solid fa-gears" aria-hidden="true"></i>
+                        <h4>Un protocole plus moderne</h4>
+                        <p>IPv6 simplifie l'en-tête des paquets, permet l'autoconfiguration des adresses et a été conçu en intégrant la sécurité IPsec.</p>
+                    </article>
+                </div>
+
+                <!-- 4. En résumé -->
+                <aside class="encart-resume">
+                    <p class="etiquette-carte">En résumé</p>
+                    <p>IPv4 arrive à saturation. IPv6 apporte un espace d'adressage quasi illimité et des fonctionnalités modernes. La transition est progressive : aujourd'hui, les deux protocoles cohabitent sur les réseaux.</p>
+                </aside>
+            </div>
+
+            <!-- 5. Sources -->
+            <div class="sources-veille">
+                <p class="etiquette-carte">Sources</p>
+                <ul>
+                    <li>RFC 8200 — <a href="https://www.rfc-editor.org/rfc/rfc8200" target="_blank" rel="noopener">Internet Protocol, Version 6 (IPv6) Specification<span class="visuellement-cache"> (nouvel onglet)</span></a></li>
+                    <li>RIPE NCC — <a href="https://www.ripe.net/publications/news/the-ripe-ncc-has-run-out-of-ipv4-addresses/" target="_blank" rel="noopener">The RIPE NCC has run out of IPv4 Addresses<span class="visuellement-cache"> (nouvel onglet)</span></a></li>
+                    <li>IANA — <a href="https://www.iana.org/assignments/ipv4-address-space/" target="_blank" rel="noopener">IPv4 Address Space Registry<span class="visuellement-cache"> (nouvel onglet)</span></a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-contenu">
+            <p>&copy; 2026 Fouad El Mamouni</p>
+            <p>BTS SIO option SISR · IEF2I Vincennes</p>
+        </div>
+    </footer>
+
+    <!-- Bouton rond pour remonter (c'est un lien : il fonctionne même sans JavaScript) -->
+    <a href="#top" class="retour-haut" aria-label="Remonter en haut de la page">↑</a>
+
+    <!-- Script commun à toutes les pages -->
+    <script src="script.js"></script>
+
+</body>
+</html>
